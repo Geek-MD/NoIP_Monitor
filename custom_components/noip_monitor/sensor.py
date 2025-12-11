@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
@@ -11,6 +11,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, STATE_DISCONNECTED
+
+if TYPE_CHECKING:
+    from . import NoIPDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -69,10 +72,11 @@ class NoIPSensor(CoordinatorEntity, SensorEntity):
     """Representation of a NoIP Monitor sensor."""
 
     _attr_has_entity_name = True
+    coordinator: NoIPDataUpdateCoordinator
 
     def __init__(
         self,
-        coordinator,
+        coordinator: NoIPDataUpdateCoordinator,
         entry: ConfigEntry,
         hostname: str,
     ) -> None:
@@ -102,7 +106,8 @@ class NoIPSensor(CoordinatorEntity, SensorEntity):
             return STATE_DISCONNECTED
 
         if host_data.get("status") == "connected" and host_data.get("ip"):
-            return host_data["ip"]
+            ip_value: str = host_data["ip"]
+            return ip_value
         
         return STATE_DISCONNECTED
 
@@ -137,4 +142,4 @@ class NoIPSensor(CoordinatorEntity, SensorEntity):
     @property
     def available(self) -> bool:
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return bool(self.coordinator.last_update_success)
