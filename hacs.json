@@ -1,0 +1,5 @@
+{
+  "name": "NoIP Monitor",
+  "render_readme": true,
+  "domains": ["sensor"]
+}
