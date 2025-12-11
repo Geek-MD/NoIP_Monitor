@@ -1,0 +1,33 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurar NoIP Monitor",
+        "description": "Introduce las credenciales de tu cuenta NoIP",
+        "data": {
+          "username": "Usuario",
+          "password": "Contraseña"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "No se pudo conectar a la API de NoIP",
+      "invalid_auth": "Credenciales de autenticación inválidas",
+      "unknown": "Ha ocurrido un error inesperado"
+    },
+    "abort": {
+      "already_configured": "La cuenta ya está configurada"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configurar Hostnames de NoIP",
+        "description": "Introduce los hostnames de NoIP que quieres monitorear (separados por comas). Ejemplo: {hostnames_example}\n\nDeja vacío para monitorear todos los hostnames de tu cuenta.",
+        "data": {
+          "hostnames": "Hostnames"
+        }
+      }
+    }
+  }
+}
