@@ -10,6 +10,8 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 
+<img width="200" height="200" alt="icon" src="https://github.com/Geek-MD/NoIP_Monitor/blob/main/icon.png?raw=true" />
+
 # NoIP Monitor
 
 A custom Home Assistant integration to monitor your NoIP dynamic hostnames' IP addresses.
