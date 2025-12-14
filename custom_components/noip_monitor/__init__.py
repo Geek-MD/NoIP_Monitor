@@ -86,20 +86,29 @@ class NoIPDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             hostnames = self.entry.options.get("hostnames", [])
             
+            _LOGGER.debug("Updating NoIP data for hostnames: %s", hostnames)
+            
             if not hostnames:
                 # If no hostnames configured, try to get all from account
+                _LOGGER.info("No hostnames configured. Please configure hostnames in integration options.")
                 hostnames_data = await self.client.async_get_hosts()
                 if hostnames_data:
+                    _LOGGER.debug("Retrieved %d hosts from account", len(hostnames_data))
                     return hostnames_data
+                _LOGGER.warning("No hostnames configured and unable to retrieve from account. Please configure hostnames manually.")
                 return {}
             
             # Fetch data for configured hostnames
             data = {}
             for hostname in hostnames:
+                _LOGGER.debug("Fetching data for hostname: %s", hostname)
                 host_data = await self.client.async_get_host_ip(hostname)
                 data[hostname] = host_data
+                _LOGGER.debug("Data for %s: %s", hostname, host_data)
             
+            _LOGGER.info("Successfully updated data for %d hostnames", len(data))
             return data
             
         except Exception as err:
+            _LOGGER.error("Error communicating with NoIP API: %s", err, exc_info=True)
             raise UpdateFailed(f"Error communicating with NoIP API: {err}") from err

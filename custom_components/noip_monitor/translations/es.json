@@ -3,16 +3,20 @@
     "step": {
       "user": {
         "title": "Configurar NoIP Monitor",
-        "description": "Introduce las credenciales de tu cuenta NoIP",
+        "description": "Introduce las credenciales de tu cuenta NoIP para monitorear tus hostnames de DNS dinámico.\n\nTus credenciales se utilizan para autenticarse con la API de NoIP y obtener información de los hostnames.",
         "data": {
-          "username": "Usuario",
-          "password": "Contraseña"
+          "username": "Usuario de NoIP",
+          "password": "Contraseña de NoIP"
+        },
+        "data_description": {
+          "username": "Tu nombre de usuario o correo electrónico de NoIP",
+          "password": "Tu contraseña de NoIP (usa una contraseña específica para aplicaciones si tienes 2FA activado)"
         }
       }
     },
     "error": {
       "cannot_connect": "No se pudo conectar a la API de NoIP",
-      "invalid_auth": "Credenciales de autenticación inválidas",
+      "invalid_auth": "Credenciales de autenticación inválidas. Si tienes activada la Autenticación de Dos Factores en tu cuenta NoIP, necesitas generar y usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
       "unknown": "Ha ocurrido un error inesperado"
     },
     "abort": {

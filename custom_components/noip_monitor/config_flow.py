@@ -29,10 +29,14 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
         errors: dict[str, str] = {}
 
         if user_input is not None:
+            # Get credentials from user input
+            username: str = user_input[CONF_USERNAME]
+            password: str = user_input[CONF_PASSWORD]
+            
             # Validate credentials
             client = NoIPClient(
-                username=user_input[CONF_USERNAME],
-                password=user_input[CONF_PASSWORD],
+                username=username,
+                password=password,
             )
             
             try:
@@ -41,12 +45,15 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                 
                 if valid:
                     # Create entry with unique ID based on username
-                    await self.async_set_unique_id(user_input[CONF_USERNAME].lower())
+                    await self.async_set_unique_id(username.lower())
                     self._abort_if_unique_id_configured()
                     
                     return self.async_create_entry(
-                        title=f"NoIP ({user_input[CONF_USERNAME]})",
-                        data=user_input,
+                        title=f"NoIP ({username})",
+                        data={
+                            CONF_USERNAME: username,
+                            CONF_PASSWORD: password,
+                        },
                     )
                 else:
                     errors["base"] = "invalid_auth"

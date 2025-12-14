@@ -18,7 +18,11 @@ class NoIPClient:
     """NoIP API Client."""
 
     def __init__(self, username: str, password: str) -> None:
-        """Initialize the NoIP client."""
+        """Initialize the NoIP client.
+        
+        Note: For accounts with 2FA enabled, use an application-specific password
+        instead of your regular password.
+        """
         self.username = username
         self.password = password
         self._session: aiohttp.ClientSession | None = None
@@ -55,7 +59,7 @@ class NoIPClient:
                 timeout=aiohttp.ClientTimeout(total=30),
             ) as response:
                 text = await response.text()
-                _LOGGER.debug(f"NoIP response for {hostname}: {text}")
+                _LOGGER.debug("NoIP response for %s: %s", hostname, text)
                 
                 # Parse NoIP response
                 # Responses can be: "good <ip>", "nochg <ip>", "nohost", etc.
@@ -106,7 +110,7 @@ class NoIPClient:
                     }
                     
         except asyncio.TimeoutError:
-            _LOGGER.error(f"Timeout connecting to NoIP API for {hostname}")
+            _LOGGER.error("Timeout connecting to NoIP API for %s", hostname)
             return {
                 "hostname": hostname,
                 "ip": None,
@@ -114,7 +118,7 @@ class NoIPClient:
                 "error": "Timeout",
             }
         except Exception as err:
-            _LOGGER.error(f"Error fetching NoIP data for {hostname}: {err}")
+            _LOGGER.error("Error fetching NoIP data for %s: %s", hostname, err)
             return {
                 "hostname": hostname,
                 "ip": None,
@@ -129,7 +133,11 @@ class NoIPClient:
         return {}
 
     async def async_validate_auth(self) -> bool:
-        """Validate authentication credentials."""
+        """Validate authentication credentials.
+        
+        Returns:
+            bool: True if credentials are valid, False otherwise.
+        """
         try:
             # Try with a dummy hostname to check if credentials are valid
             session = await self._get_session()
@@ -143,15 +151,18 @@ class NoIPClient:
                 timeout=aiohttp.ClientTimeout(total=30),
             ) as response:
                 text = await response.text()
+                _LOGGER.debug("NoIP auth validation response: %s", text)
+                
                 # If we get "badauth", credentials are invalid
                 if "badauth" in text:
                     return False
+                
                 # Any other response means credentials are OK
                 # (even "nohost" means auth worked)
                 return True
                 
         except Exception as err:
-            _LOGGER.error(f"Error validating NoIP credentials: {err}")
+            _LOGGER.error("Error validating NoIP credentials: %s", err)
             return False
 
     async def close(self) -> None:

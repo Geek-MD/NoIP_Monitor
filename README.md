@@ -29,6 +29,7 @@ A custom Home Assistant integration to monitor your NoIP dynamic hostnames' IP a
 - ✅ Dynamic icons (connected/disconnected)
 - ✅ Additional attributes with status information
 - ✅ Spanish and English localization
+- ✅ **Two-Factor Authentication (2FA) support**
 
 ---
 
@@ -60,8 +61,9 @@ A custom Home Assistant integration to monitor your NoIP dynamic hostnames' IP a
 2. Click **+ Add Integration**
 3. Search for **NoIP Monitor**
 4. Enter your NoIP credentials:
-   - **Username**: Your NoIP username
+   - **Username**: Your NoIP username or email address
    - **Password**: Your NoIP password
+   - **Important for 2FA users**: If you have Two-Factor Authentication enabled on your NoIP account, you'll need to use an application-specific password instead of your regular password. Generate one from your NoIP account settings.
 5. Click **Submit**
 
 ### Configure Hostnames
@@ -149,7 +151,18 @@ content: |
 
 **Issue: Authentication error**
 - Verify your NoIP username and password
+- **If you have Two-Factor Authentication (2FA) enabled**: You must use an application-specific password instead of your regular password
+  - Log in to your NoIP account
+  - Go to Account Settings → Security
+  - Generate an application-specific password
+  - Use this password when configuring the integration
 - Make sure you don't have special characters that might cause issues
+
+**Issue: Sensors not appearing**
+- Make sure you have configured hostnames in the integration options (Settings → Devices & Services → NoIP Monitor → Configure)
+- If you have 2FA enabled, ensure you're using an application-specific password
+- Check Home Assistant logs for authentication or connection errors
+- Restart Home Assistant after configuration
 
 ---
 
@@ -175,6 +188,12 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 ## 📌 Version
+
+**v0.2.0** - Current release
+- ✅ Two-Factor Authentication (2FA) support
+- ✅ Enhanced authentication dialog with descriptive text
+- ✅ Fixed sensor creation issues for accounts with 2FA
+- ✅ Improved user experience with better context in configuration dialogs
 
 **v0.1.0** - Initial release
 
