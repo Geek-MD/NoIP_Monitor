@@ -63,10 +63,8 @@ A custom Home Assistant integration to monitor your NoIP dynamic hostnames' IP a
 4. Enter your NoIP credentials:
    - **Username**: Your NoIP username or email address
    - **Password**: Your NoIP password
-5. If your account has Two-Factor Authentication (2FA) enabled:
-   - You'll be prompted to enter a 6-digit code from your authenticator app
-   - Enter the code and click **Submit**
-6. Click **Submit**
+   - **Important for 2FA users**: If you have Two-Factor Authentication enabled on your NoIP account, you'll need to use an application-specific password instead of your regular password. Generate one from your NoIP account settings.
+5. Click **Submit**
 
 ### Configure Hostnames
 
@@ -153,12 +151,18 @@ content: |
 
 **Issue: Authentication error**
 - Verify your NoIP username and password
-- If you have Two-Factor Authentication (2FA) enabled, make sure to enter the correct 6-digit code from your authenticator app
+- **If you have Two-Factor Authentication (2FA) enabled**: You must use an application-specific password instead of your regular password
+  - Log in to your NoIP account
+  - Go to Account Settings → Security
+  - Generate an application-specific password
+  - Use this password when configuring the integration
 - Make sure you don't have special characters that might cause issues
 
-**Issue: Sensors not appearing with 2FA enabled**
-- This is fixed in v0.2.0 - the integration now properly supports 2FA
-- Make sure to enter your 2FA code when prompted during setup
+**Issue: Sensors not appearing**
+- Make sure you have configured hostnames in the integration options (Settings → Devices & Services → NoIP Monitor → Configure)
+- If you have 2FA enabled, ensure you're using an application-specific password
+- Check Home Assistant logs for authentication or connection errors
+- Restart Home Assistant after configuration
 
 ---
 
