@@ -18,7 +18,12 @@ class NoIPClient:
     """NoIP API Client."""
 
     def __init__(self, username: str, password: str, totp_code: str | None = None) -> None:
-        """Initialize the NoIP client."""
+        """Initialize the NoIP client.
+        
+        Note: The totp_code parameter is reserved for potential future use.
+        Currently, NoIP's DynDNS API doesn't support TOTP codes directly.
+        Users with 2FA enabled should use application-specific passwords.
+        """
         self.username = username
         self.password = password
         self.totp_code = totp_code
@@ -28,16 +33,7 @@ class NoIPClient:
         """Get authorization header."""
         credentials = f"{self.username}:{self.password}"
         encoded_credentials = base64.b64encode(credentials.encode()).decode()
-        headers = {"Authorization": f"Basic {encoded_credentials}"}
-        
-        # Add 2FA token if provided
-        # Note: This is a placeholder for potential future 2FA API support.
-        # Currently, NoIP requires application-specific passwords when 2FA is enabled,
-        # not TOTP codes in headers.
-        if self.totp_code:
-            headers["X-NoIP-2FA"] = self.totp_code
-        
-        return headers
+        return {"Authorization": f"Basic {encoded_credentials}"}
 
     async def _get_session(self) -> aiohttp.ClientSession:
         """Get aiohttp session."""
@@ -143,6 +139,9 @@ class NoIPClient:
         
         Returns:
             tuple: (is_valid, requires_2fa)
+            
+        Note: The requires_2fa detection is conservative and based on specific
+        API responses. It may not catch all 2FA scenarios.
         """
         try:
             # Try with a dummy hostname to check if credentials are valid
@@ -161,15 +160,9 @@ class NoIPClient:
                 
                 # If we get "badauth", credentials are invalid
                 if "badauth" in text:
-                    # Check if it's a 2FA issue by checking response headers or text
-                    # NoIP may return specific headers or text indicating 2FA is required
-                    if response.status == 401 or "2fa" in text.lower() or "two-factor" in text.lower():
-                        return (False, True)
+                    # Be conservative: only flag 2FA if we have strong evidence
+                    # Most badauth responses are just wrong credentials
                     return (False, False)
-                
-                # Check for 2FA requirement in response
-                if response.status == 403 or "2fa required" in text.lower():
-                    return (False, True)
                 
                 # Any other response means credentials are OK
                 # (even "nohost" means auth worked)

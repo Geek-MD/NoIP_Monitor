@@ -12,23 +12,12 @@
           "username": "Tu nombre de usuario o correo electrónico de NoIP",
           "password": "Tu contraseña de NoIP (usa una contraseña específica para aplicaciones si tienes 2FA activado)"
         }
-      },
-      "2fa": {
-        "title": "Autenticación de Dos Factores",
-        "description": "Tu cuenta de NoIP tiene activada la autenticación de dos factores. Por favor, introduce el código de 6 dígitos de tu aplicación de autenticación.",
-        "data": {
-          "totp_code": "Código 2FA"
-        },
-        "data_description": {
-          "totp_code": "Código de 6 dígitos de tu aplicación de autenticación"
-        }
       }
     },
     "error": {
       "cannot_connect": "No se pudo conectar a la API de NoIP",
       "invalid_auth": "Credenciales de autenticación inválidas. Si tienes activada la Autenticación de Dos Factores en tu cuenta NoIP, es posible que necesites generar y usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
-      "invalid_2fa": "Código de autenticación de dos factores inválido",
-      "2fa_required": "Se requiere autenticación de dos factores para esta cuenta",
+      "2fa_required": "Tu cuenta de NoIP parece requerir Autenticación de Dos Factores. Por favor, genera una contraseña específica para aplicaciones desde la configuración de tu cuenta NoIP y úsala en lugar de tu contraseña normal.",
       "unknown": "Ha ocurrido un error inesperado"
     },
     "abort": {

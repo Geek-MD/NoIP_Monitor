@@ -12,23 +12,12 @@
           "username": "Your NoIP account username or email address",
           "password": "Your NoIP account password (use an application-specific password if you have 2FA enabled)"
         }
-      },
-      "2fa": {
-        "title": "Two-Factor Authentication",
-        "description": "Your NoIP account has two-factor authentication enabled. Please enter the 6-digit code from your authenticator app.",
-        "data": {
-          "totp_code": "2FA Code"
-        },
-        "data_description": {
-          "totp_code": "6-digit code from your authenticator app"
-        }
       }
     },
     "error": {
       "cannot_connect": "Failed to connect to NoIP API",
       "invalid_auth": "Invalid authentication credentials. If you have Two-Factor Authentication enabled on your NoIP account, you may need to generate and use an application-specific password instead of your regular password.",
-      "invalid_2fa": "Invalid two-factor authentication code",
-      "2fa_required": "Two-factor authentication is required for this account",
+      "2fa_required": "Your NoIP account appears to require Two-Factor Authentication. Please generate an application-specific password from your NoIP account settings and use it instead of your regular password.",
       "unknown": "Unexpected error occurred"
     },
     "abort": {
