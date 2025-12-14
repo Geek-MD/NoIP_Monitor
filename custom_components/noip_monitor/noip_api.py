@@ -31,6 +31,9 @@ class NoIPClient:
         headers = {"Authorization": f"Basic {encoded_credentials}"}
         
         # Add 2FA token if provided
+        # Note: This is a placeholder for potential future 2FA API support.
+        # Currently, NoIP requires application-specific passwords when 2FA is enabled,
+        # not TOTP codes in headers.
         if self.totp_code:
             headers["X-NoIP-2FA"] = self.totp_code
         
@@ -62,7 +65,7 @@ class NoIPClient:
                 timeout=aiohttp.ClientTimeout(total=30),
             ) as response:
                 text = await response.text()
-                _LOGGER.debug(f"NoIP response for {hostname}: {text}")
+                _LOGGER.debug("NoIP response for %s: %s", hostname, text)
                 
                 # Parse NoIP response
                 # Responses can be: "good <ip>", "nochg <ip>", "nohost", etc.
@@ -113,7 +116,7 @@ class NoIPClient:
                     }
                     
         except asyncio.TimeoutError:
-            _LOGGER.error(f"Timeout connecting to NoIP API for {hostname}")
+            _LOGGER.error("Timeout connecting to NoIP API for %s", hostname)
             return {
                 "hostname": hostname,
                 "ip": None,
@@ -121,7 +124,7 @@ class NoIPClient:
                 "error": "Timeout",
             }
         except Exception as err:
-            _LOGGER.error(f"Error fetching NoIP data for {hostname}: {err}")
+            _LOGGER.error("Error fetching NoIP data for %s: %s", hostname, err)
             return {
                 "hostname": hostname,
                 "ip": None,
@@ -154,7 +157,7 @@ class NoIPClient:
                 timeout=aiohttp.ClientTimeout(total=30),
             ) as response:
                 text = await response.text()
-                _LOGGER.debug(f"NoIP auth validation response: {text}")
+                _LOGGER.debug("NoIP auth validation response: %s", text)
                 
                 # If we get "badauth", credentials are invalid
                 if "badauth" in text:
@@ -173,7 +176,7 @@ class NoIPClient:
                 return (True, False)
                 
         except Exception as err:
-            _LOGGER.error(f"Error validating NoIP credentials: {err}")
+            _LOGGER.error("Error validating NoIP credentials: %s", err)
             return (False, False)
 
     async def close(self) -> None:

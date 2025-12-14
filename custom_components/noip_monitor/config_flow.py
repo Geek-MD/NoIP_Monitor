@@ -121,7 +121,8 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                         data={
                             CONF_USERNAME: self._username,
                             CONF_PASSWORD: self._password,
-                            CONF_TOTP_CODE: totp_code,
+                            # Note: TOTP codes should not be stored as they expire quickly
+                            # Users with 2FA should use application-specific passwords
                         },
                     )
                 else:

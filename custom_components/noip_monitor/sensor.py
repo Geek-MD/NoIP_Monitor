@@ -32,9 +32,9 @@ async def async_setup_entry(
     # Create sensors for each hostname
     entities = []
     if coordinator.data:
-        _LOGGER.info(f"Creating sensors for {len(coordinator.data)} hostnames")
+        _LOGGER.info("Creating sensors for %d hostnames", len(coordinator.data))
         for hostname in coordinator.data:
-            _LOGGER.debug(f"Creating sensor for hostname: {hostname}")
+            _LOGGER.debug("Creating sensor for hostname: %s", hostname)
             entities.append(NoIPSensor(coordinator, entry, hostname))
     else:
         _LOGGER.warning("No data available from coordinator. No sensors will be created. "
