@@ -17,16 +17,14 @@ NOIP_API_HOST_INFO = "https://www.noip.com/api/host"
 class NoIPClient:
     """NoIP API Client."""
 
-    def __init__(self, username: str, password: str, totp_code: str | None = None) -> None:
+    def __init__(self, username: str, password: str) -> None:
         """Initialize the NoIP client.
         
-        Note: The totp_code parameter is reserved for potential future use.
-        Currently, NoIP's DynDNS API doesn't support TOTP codes directly.
-        Users with 2FA enabled should use application-specific passwords.
+        Note: For accounts with 2FA enabled, use an application-specific password
+        instead of your regular password.
         """
         self.username = username
         self.password = password
-        self.totp_code = totp_code
         self._session: aiohttp.ClientSession | None = None
 
     def _get_auth_header(self) -> dict[str, str]:
@@ -134,14 +132,11 @@ class NoIPClient:
         # to list all hosts, so we'll return empty and rely on user configuration
         return {}
 
-    async def async_validate_auth(self) -> tuple[bool, bool]:
+    async def async_validate_auth(self) -> bool:
         """Validate authentication credentials.
         
         Returns:
-            tuple: (is_valid, requires_2fa)
-            
-        Note: The requires_2fa detection is conservative and based on specific
-        API responses. It may not catch all 2FA scenarios.
+            bool: True if credentials are valid, False otherwise.
         """
         try:
             # Try with a dummy hostname to check if credentials are valid
@@ -160,17 +155,15 @@ class NoIPClient:
                 
                 # If we get "badauth", credentials are invalid
                 if "badauth" in text:
-                    # Be conservative: only flag 2FA if we have strong evidence
-                    # Most badauth responses are just wrong credentials
-                    return (False, False)
+                    return False
                 
                 # Any other response means credentials are OK
                 # (even "nohost" means auth worked)
-                return (True, False)
+                return True
                 
         except Exception as err:
             _LOGGER.error("Error validating NoIP credentials: %s", err)
-            return (False, False)
+            return False
 
     async def close(self) -> None:
         """Close the session."""

@@ -16,8 +16,7 @@
     },
     "error": {
       "cannot_connect": "Failed to connect to NoIP API",
-      "invalid_auth": "Invalid authentication credentials. If you have Two-Factor Authentication enabled on your NoIP account, you may need to generate and use an application-specific password instead of your regular password.",
-      "2fa_required": "Your NoIP account appears to require Two-Factor Authentication. Please generate an application-specific password from your NoIP account settings and use it instead of your regular password.",
+      "invalid_auth": "Invalid authentication credentials. If you have Two-Factor Authentication enabled on your NoIP account, you need to generate and use an application-specific password instead of your regular password.",
       "unknown": "Unexpected error occurred"
     },
     "abort": {

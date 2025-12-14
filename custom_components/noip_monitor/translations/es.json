@@ -16,8 +16,7 @@
     },
     "error": {
       "cannot_connect": "No se pudo conectar a la API de NoIP",
-      "invalid_auth": "Credenciales de autenticación inválidas. Si tienes activada la Autenticación de Dos Factores en tu cuenta NoIP, es posible que necesites generar y usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
-      "2fa_required": "Tu cuenta de NoIP parece requerir Autenticación de Dos Factores. Por favor, genera una contraseña específica para aplicaciones desde la configuración de tu cuenta NoIP y úsala en lugar de tu contraseña normal.",
+      "invalid_auth": "Credenciales de autenticación inválidas. Si tienes activada la Autenticación de Dos Factores en tu cuenta NoIP, necesitas generar y usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
       "unknown": "Ha ocurrido un error inesperado"
     },
     "abort": {

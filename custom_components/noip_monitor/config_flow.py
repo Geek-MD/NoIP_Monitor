@@ -22,12 +22,6 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
 
     VERSION = 1
 
-    def __init__(self) -> None:
-        """Initialize the config flow."""
-        # Store credentials temporarily during multi-step flows
-        self._username: str | None = None
-        self._password: str | None = None
-
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
@@ -46,15 +40,10 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
             )
             
             try:
-                valid, _requires_2fa = await client.async_validate_auth()
+                valid = await client.async_validate_auth()
                 await client.close()
                 
-                # Note: If 2FA is detected, we inform the user in the error message
-                # NoIP doesn't support TOTP codes in API requests, so users must
-                # use application-specific passwords
-                if _requires_2fa:
-                    errors["base"] = "2fa_required"
-                elif valid:
+                if valid:
                     # Create entry with unique ID based on username
                     await self.async_set_unique_id(username.lower())
                     self._abort_if_unique_id_configured()
