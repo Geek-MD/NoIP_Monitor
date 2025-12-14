@@ -3,16 +3,32 @@
     "step": {
       "user": {
         "title": "Configure NoIP Monitor",
-        "description": "Enter your NoIP account credentials",
+        "description": "Enter your NoIP account credentials to monitor your dynamic DNS hostnames.\n\nYour credentials are used to authenticate with the NoIP API and retrieve hostname information.",
         "data": {
-          "username": "Username",
-          "password": "Password"
+          "username": "NoIP Username",
+          "password": "NoIP Password"
+        },
+        "data_description": {
+          "username": "Your NoIP account username or email address",
+          "password": "Your NoIP account password"
+        }
+      },
+      "2fa": {
+        "title": "Two-Factor Authentication",
+        "description": "Your NoIP account has two-factor authentication enabled. Please enter the 6-digit code from your authenticator app.",
+        "data": {
+          "totp_code": "2FA Code"
+        },
+        "data_description": {
+          "totp_code": "6-digit code from your authenticator app"
         }
       }
     },
     "error": {
       "cannot_connect": "Failed to connect to NoIP API",
       "invalid_auth": "Invalid authentication credentials",
+      "invalid_2fa": "Invalid two-factor authentication code",
+      "2fa_required": "Two-factor authentication is required for this account",
       "unknown": "Unexpected error occurred"
     },
     "abort": {

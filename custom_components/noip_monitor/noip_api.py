@@ -17,17 +17,24 @@ NOIP_API_HOST_INFO = "https://www.noip.com/api/host"
 class NoIPClient:
     """NoIP API Client."""
 
-    def __init__(self, username: str, password: str) -> None:
+    def __init__(self, username: str, password: str, totp_code: str | None = None) -> None:
         """Initialize the NoIP client."""
         self.username = username
         self.password = password
+        self.totp_code = totp_code
         self._session: aiohttp.ClientSession | None = None
 
     def _get_auth_header(self) -> dict[str, str]:
         """Get authorization header."""
         credentials = f"{self.username}:{self.password}"
         encoded_credentials = base64.b64encode(credentials.encode()).decode()
-        return {"Authorization": f"Basic {encoded_credentials}"}
+        headers = {"Authorization": f"Basic {encoded_credentials}"}
+        
+        # Add 2FA token if provided
+        if self.totp_code:
+            headers["X-NoIP-2FA"] = self.totp_code
+        
+        return headers
 
     async def _get_session(self) -> aiohttp.ClientSession:
         """Get aiohttp session."""
@@ -128,8 +135,12 @@ class NoIPClient:
         # to list all hosts, so we'll return empty and rely on user configuration
         return {}
 
-    async def async_validate_auth(self) -> bool:
-        """Validate authentication credentials."""
+    async def async_validate_auth(self) -> tuple[bool, bool]:
+        """Validate authentication credentials.
+        
+        Returns:
+            tuple: (is_valid, requires_2fa)
+        """
         try:
             # Try with a dummy hostname to check if credentials are valid
             session = await self._get_session()
@@ -143,16 +154,27 @@ class NoIPClient:
                 timeout=aiohttp.ClientTimeout(total=30),
             ) as response:
                 text = await response.text()
+                _LOGGER.debug(f"NoIP auth validation response: {text}")
+                
                 # If we get "badauth", credentials are invalid
                 if "badauth" in text:
-                    return False
+                    # Check if it's a 2FA issue by checking response headers or text
+                    # NoIP may return specific headers or text indicating 2FA is required
+                    if response.status == 401 or "2fa" in text.lower() or "two-factor" in text.lower():
+                        return (False, True)
+                    return (False, False)
+                
+                # Check for 2FA requirement in response
+                if response.status == 403 or "2fa required" in text.lower():
+                    return (False, True)
+                
                 # Any other response means credentials are OK
                 # (even "nohost" means auth worked)
-                return True
+                return (True, False)
                 
         except Exception as err:
             _LOGGER.error(f"Error validating NoIP credentials: {err}")
-            return False
+            return (False, False)
 
     async def close(self) -> None:
         """Close the session."""

@@ -27,6 +27,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     client = NoIPClient(
         username=entry.data["username"],
         password=entry.data["password"],
+        totp_code=entry.data.get("totp_code"),
     )
 
     # Create coordinator
