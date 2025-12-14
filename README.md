@@ -187,18 +187,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-## 📌 Version
-
-**v0.2.0** - Current release
-- ✅ Two-Factor Authentication (2FA) support
-- ✅ Enhanced authentication dialog with descriptive text
-- ✅ Fixed sensor creation issues for accounts with 2FA
-- ✅ Improved user experience with better context in configuration dialogs
-
-**v0.1.0** - Initial release
-
----
-
 <div align="center">
   
 💻 **Proudly developed with GitHub Copilot** 🚀
