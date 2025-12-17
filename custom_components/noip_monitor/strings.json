@@ -33,7 +33,8 @@
     },
     "abort": {
       "already_configured": "Account is already configured",
-      "reconfigure_successful": "Credentials updated successfully"
+      "reconfigure_successful": "Credentials updated successfully",
+      "entry_not_found": "Configuration entry not found"
     }
   },
   "options": {

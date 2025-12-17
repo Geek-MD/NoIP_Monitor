@@ -33,7 +33,8 @@
     },
     "abort": {
       "already_configured": "La cuenta ya está configurada",
-      "reconfigure_successful": "Credenciales actualizadas correctamente"
+      "reconfigure_successful": "Credenciales actualizadas correctamente",
+      "entry_not_found": "Entrada de configuración no encontrada"
     }
   },
   "options": {

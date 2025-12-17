@@ -79,6 +79,9 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
         errors: dict[str, str] = {}
         entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         
+        if entry is None:
+            return self.async_abort(reason="entry_not_found")
+        
         if user_input is not None:
             # Get credentials from user input
             username: str = user_input[CONF_USERNAME]
