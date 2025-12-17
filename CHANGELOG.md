@@ -47,4 +47,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error handling for authentication failures, timeouts, and connection issues
 - Coordinator-based updates for efficient API usage
 
+[0.2.1]: https://github.com/Geek-MD/NoIP_Monitor/releases/tag/v0.2.1
 [0.1.0]: https://github.com/Geek-MD/NoIP_Monitor/releases/tag/v0.1.0
