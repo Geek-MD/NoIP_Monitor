@@ -3,7 +3,19 @@
     "step": {
       "user": {
         "title": "Configurar NoIP Monitor",
-        "description": "Introduce las credenciales de tu cuenta NoIP para monitorear tus hostnames de DNS dinámico.\n\nTus credenciales se utilizan para autenticarse con la API de NoIP y obtener información de los hostnames.",
+        "description": "Introduce las credenciales de tu cuenta NoIP para monitorear tus hostnames de DNS dinámico.\n\nTus credenciales se utilizan para autenticarse con la API de NoIP y obtener información de los hostnames.\n\n**Importante:** Si tienes habilitada la Autenticación de Dos Factores (2FA) en tu cuenta NoIP, debes usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
+        "data": {
+          "username": "Usuario de NoIP",
+          "password": "Contraseña de NoIP"
+        },
+        "data_description": {
+          "username": "Tu nombre de usuario o correo electrónico de NoIP",
+          "password": "Tu contraseña de NoIP (usa una contraseña específica para aplicaciones si tienes 2FA activado)"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurar NoIP Monitor",
+        "description": "Actualiza las credenciales de tu cuenta NoIP.\n\n**Importante:** Si tienes habilitada la Autenticación de Dos Factores (2FA) en tu cuenta NoIP, debes usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
         "data": {
           "username": "Usuario de NoIP",
           "password": "Contraseña de NoIP"
@@ -16,11 +28,12 @@
     },
     "error": {
       "cannot_connect": "No se pudo conectar a la API de NoIP",
-      "invalid_auth": "Credenciales de autenticación inválidas. Si tienes activada la Autenticación de Dos Factores en tu cuenta NoIP, necesitas generar y usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
+      "invalid_auth": "Credenciales de autenticación inválidas. Si tienes activada la Autenticación de Dos Factores (2FA) en tu cuenta NoIP, necesitas generar y usar una contraseña específica para aplicaciones en lugar de tu contraseña normal.",
       "unknown": "Ha ocurrido un error inesperado"
     },
     "abort": {
-      "already_configured": "La cuenta ya está configurada"
+      "already_configured": "La cuenta ya está configurada",
+      "reconfigure_successful": "Credenciales actualizadas correctamente"
     }
   },
   "options": {

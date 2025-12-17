@@ -72,6 +72,61 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
             errors=errors,
         )
 
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Handle reconfiguration of the integration."""
+        errors: dict[str, str] = {}
+        entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
+        
+        if user_input is not None:
+            # Get credentials from user input
+            username: str = user_input[CONF_USERNAME]
+            password: str = user_input[CONF_PASSWORD]
+            
+            # Validate credentials
+            client = NoIPClient(
+                username=username,
+                password=password,
+            )
+            
+            try:
+                valid = await client.async_validate_auth()
+                await client.close()
+                
+                if valid:
+                    # Update the config entry with new credentials
+                    self.hass.config_entries.async_update_entry(
+                        entry,
+                        data={
+                            CONF_USERNAME: username,
+                            CONF_PASSWORD: password,
+                        },
+                    )
+                    # Reload the config entry to apply changes
+                    await self.hass.config_entries.async_reload(entry.entry_id)
+                    return self.async_abort(reason="reconfigure_successful")
+                else:
+                    errors["base"] = "invalid_auth"
+            except Exception:  # pylint: disable=broad-except
+                _LOGGER.exception("Unexpected exception during reconfiguration")
+                errors["base"] = "cannot_connect"
+
+        # Show form with current username as suggested value
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_USERNAME,
+                        description={"suggested_value": entry.data.get(CONF_USERNAME, "")},
+                    ): str,
+                    vol.Required(CONF_PASSWORD): str,
+                }
+            ),
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(

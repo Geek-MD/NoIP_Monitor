@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-12-17
+
+### Fixed
+- Fixed "500 Internal Server Error" when attempting to reconfigure the integration
+- Added reconfigure flow to allow updating NoIP credentials without removing the integration
+- Enhanced 2FA notice in configuration flow descriptions for both initial setup and reconfiguration
+- Improved handling of missing hostnames configuration
+
+### Added
+- Reconfigure flow for updating credentials (username and password)
+- More prominent 2FA warnings in both English and Spanish translations
+- Success message when reconfiguration is completed
+
 ## [0.1.0] - 2025-12-11
 
 ### Added
