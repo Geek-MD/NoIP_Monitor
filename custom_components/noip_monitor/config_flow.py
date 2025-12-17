@@ -77,7 +77,9 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
     ) -> FlowResult:
         """Handle reconfiguration of the integration."""
         errors: dict[str, str] = {}
-        entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
+        entry: config_entries.ConfigEntry | None = self.hass.config_entries.async_get_entry(
+            self.context["entry_id"]
+        )
         
         if entry is None:
             return self.async_abort(reason="entry_not_found")
