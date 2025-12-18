@@ -29,7 +29,7 @@ A custom Home Assistant integration to monitor your NoIP dynamic hostnames' IP a
 - ✅ Dynamic icons (connected/disconnected)
 - ✅ Additional attributes with status information
 - ✅ Spanish and English localization
-- ✅ **Two-Factor Authentication (2FA) support**
+- ✅ **Two-Factor Authentication (2FA) support with optional token field**
 
 ---
 
@@ -60,10 +60,14 @@ A custom Home Assistant integration to monitor your NoIP dynamic hostnames' IP a
 1. Go to **Settings** → **Devices & Services**
 2. Click **+ Add Integration**
 3. Search for **NoIP Monitor**
-4. Enter your NoIP credentials:
+4. Enter your NoIP authentication credentials:
    - **Username**: Your NoIP username or email address
    - **Password**: Your NoIP password
-   - **Important for 2FA users**: If you have Two-Factor Authentication enabled on your NoIP account, you'll need to use an application-specific password instead of your regular password. Generate one from your NoIP account settings.
+   - **2FA Token (Optional)**: 6-digit code from your authenticator app
+   
+   **For 2FA users**, you have two options:
+   - **Option 1 (Recommended)**: Use an application-specific password in the Password field (leave 2FA Token empty)
+   - **Option 2**: Use your regular password AND provide the 6-digit 2FA token
 5. Click **Submit**
 
 ### Configure Hostnames
@@ -151,16 +155,19 @@ content: |
 
 **Issue: Authentication error**
 - Verify your NoIP username and password
-- **If you have Two-Factor Authentication (2FA) enabled**: You must use an application-specific password instead of your regular password
-  - Log in to your NoIP account
-  - Go to Account Settings → Security
-  - Generate an application-specific password
-  - Use this password when configuring the integration
+- **If you have Two-Factor Authentication (2FA) enabled**, you have two options:
+  - **Option 1 (Recommended)**: Generate and use an application-specific password
+    - Log in to your NoIP account
+    - Go to Account Settings → Security
+    - Generate an application-specific password
+    - Use this password in the Password field (leave 2FA Token field empty)
+  - **Option 2**: Use your regular password AND provide the 6-digit 2FA token from your authenticator app
+- If using 2FA token, ensure it's still valid (they expire quickly)
 - Make sure you don't have special characters that might cause issues
 
 **Issue: Sensors not appearing**
 - Make sure you have configured hostnames in the integration options (Settings → Devices & Services → NoIP Monitor → Configure)
-- If you have 2FA enabled, ensure you're using an application-specific password
+- Verify your credentials are correct (username, password, and 2FA token if applicable)
 - Check Home Assistant logs for authentication or connection errors
 - Restart Home Assistant after configuration
 

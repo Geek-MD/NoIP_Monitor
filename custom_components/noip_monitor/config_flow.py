@@ -11,7 +11,7 @@ from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
-from .const import CONF_HOSTNAMES, DOMAIN
+from .const import CONF_HOSTNAMES, CONF_2FA_TOKEN, DOMAIN
 from .noip_api import NoIPClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -32,11 +32,13 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
             # Get credentials from user input
             username: str = user_input[CONF_USERNAME]
             password: str = user_input[CONF_PASSWORD]
+            token_2fa: str | None = user_input.get(CONF_2FA_TOKEN)
             
             # Validate credentials
             client = NoIPClient(
                 username=username,
                 password=password,
+                token_2fa=token_2fa,
             )
             
             try:
@@ -48,12 +50,17 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                     await self.async_set_unique_id(username.lower())
                     self._abort_if_unique_id_configured()
                     
+                    # Store 2FA token only if provided and not empty
+                    data = {
+                        CONF_USERNAME: username,
+                        CONF_PASSWORD: password,
+                    }
+                    if token_2fa:
+                        data[CONF_2FA_TOKEN] = token_2fa
+                    
                     return self.async_create_entry(
                         title=f"NoIP ({username})",
-                        data={
-                            CONF_USERNAME: username,
-                            CONF_PASSWORD: password,
-                        },
+                        data=data,
                     )
                 else:
                     errors["base"] = "invalid_auth"
@@ -67,6 +74,7 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                 {
                     vol.Required(CONF_USERNAME): str,
                     vol.Required(CONF_PASSWORD): str,
+                    vol.Optional(CONF_2FA_TOKEN): str,
                 }
             ),
             errors=errors,
@@ -88,11 +96,13 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
             # Get credentials from user input
             username: str = user_input[CONF_USERNAME]
             password: str = user_input[CONF_PASSWORD]
+            token_2fa: str | None = user_input.get(CONF_2FA_TOKEN)
             
             # Validate credentials
             client = NoIPClient(
                 username=username,
                 password=password,
+                token_2fa=token_2fa,
             )
             
             try:
@@ -101,12 +111,16 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                 
                 if valid:
                     # Update the config entry with new credentials
+                    data = {
+                        CONF_USERNAME: username,
+                        CONF_PASSWORD: password,
+                    }
+                    if token_2fa:
+                        data[CONF_2FA_TOKEN] = token_2fa
+                    
                     self.hass.config_entries.async_update_entry(
                         entry,
-                        data={
-                            CONF_USERNAME: username,
-                            CONF_PASSWORD: password,
-                        },
+                        data=data,
                     )
                     # Reload the config entry to apply changes
                     await self.hass.config_entries.async_reload(entry.entry_id)
@@ -117,7 +131,7 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                 _LOGGER.exception("Unexpected exception during reconfiguration")
                 errors["base"] = "cannot_connect"
 
-        # Show form with current username as suggested value
+        # Show form with current username and 2FA token as suggested values
         return self.async_show_form(
             step_id="reconfigure",
             data_schema=vol.Schema(
@@ -127,6 +141,10 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
                         description={"suggested_value": entry.data.get(CONF_USERNAME, "")},
                     ): str,
                     vol.Required(CONF_PASSWORD): str,
+                    vol.Optional(
+                        CONF_2FA_TOKEN,
+                        description={"suggested_value": entry.data.get(CONF_2FA_TOKEN, "")},
+                    ): str,
                 }
             ),
             errors=errors,

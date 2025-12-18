@@ -17,21 +17,37 @@ NOIP_API_HOST_INFO = "https://www.noip.com/api/host"
 class NoIPClient:
     """NoIP API Client."""
 
-    def __init__(self, username: str, password: str) -> None:
+    def __init__(self, username: str, password: str, token_2fa: str | None = None) -> None:
         """Initialize the NoIP client.
         
-        Note: For accounts with 2FA enabled, use an application-specific password
-        instead of your regular password.
+        Note: For accounts with 2FA enabled, you can either:
+        1. Use an application-specific password (recommended)
+        2. Or provide your regular password and the 2FA token
+        
+        Args:
+            username: NoIP account username or email
+            password: NoIP account password (or app-specific password)
+            token_2fa: Optional 2FA token (6-digit code from authenticator app)
         """
         self.username = username
         self.password = password
+        self.token_2fa = token_2fa
         self._session: aiohttp.ClientSession | None = None
 
     def _get_auth_header(self) -> dict[str, str]:
         """Get authorization header."""
         credentials = f"{self.username}:{self.password}"
         encoded_credentials = base64.b64encode(credentials.encode()).decode()
-        return {"Authorization": f"Basic {encoded_credentials}"}
+        headers = {"Authorization": f"Basic {encoded_credentials}"}
+        
+        # Add 2FA token if provided
+        # Note: NoIP's API documentation doesn't officially specify 2FA token handling.
+        # This implementation attempts to pass the token via X-2FA-Token header,
+        # but it may not be supported. Users should prefer application-specific passwords.
+        if self.token_2fa:
+            headers["X-2FA-Token"] = self.token_2fa
+        
+        return headers
 
     async def _get_session(self) -> aiohttp.ClientSession:
         """Get aiohttp session."""
