@@ -3,32 +3,36 @@
     "step": {
       "user": {
         "title": "Configure NoIP Monitor",
-        "description": "Enter your NoIP account credentials to monitor your dynamic DNS hostnames.\n\nYour credentials are used to authenticate with the NoIP API and retrieve hostname information.\n\n**Important:** If you have Two-Factor Authentication (2FA) enabled on your NoIP account, you must use an application-specific password instead of your regular password.",
+        "description": "Enter your NoIP authentication credentials to monitor your dynamic DNS hostnames.\n\nYour credentials are used to authenticate with the NoIP API and retrieve hostname information.",
         "data": {
           "username": "NoIP Username",
-          "password": "NoIP Password"
+          "password": "NoIP Password",
+          "2fa_token": "2FA Token (Optional)"
         },
         "data_description": {
           "username": "Your NoIP account username or email address",
-          "password": "Your NoIP account password (use an application-specific password if you have 2FA enabled)"
+          "password": "Your NoIP account password (or application-specific password if using 2FA)",
+          "2fa_token": "6-digit code from your authenticator app (only if you have 2FA enabled and use your regular password)"
         }
       },
       "reconfigure": {
         "title": "Reconfigure NoIP Monitor",
-        "description": "Update your NoIP account credentials.\n\n**Important:** If you have Two-Factor Authentication (2FA) enabled on your NoIP account, you must use an application-specific password instead of your regular password.",
+        "description": "Update your NoIP authentication credentials.",
         "data": {
           "username": "NoIP Username",
-          "password": "NoIP Password"
+          "password": "NoIP Password",
+          "2fa_token": "2FA Token (Optional)"
         },
         "data_description": {
           "username": "Your NoIP account username or email address",
-          "password": "Your NoIP account password (use an application-specific password if you have 2FA enabled)"
+          "password": "Your NoIP account password (or application-specific password if using 2FA)",
+          "2fa_token": "6-digit code from your authenticator app (only if you have 2FA enabled and use your regular password)"
         }
       }
     },
     "error": {
       "cannot_connect": "Failed to connect to NoIP API",
-      "invalid_auth": "Invalid authentication credentials. If you have Two-Factor Authentication (2FA) enabled on your NoIP account, you need to generate and use an application-specific password instead of your regular password.",
+      "invalid_auth": "Invalid authentication credentials. Please verify your username, password, and 2FA token (if applicable).",
       "unknown": "Unexpected error occurred"
     },
     "abort": {
