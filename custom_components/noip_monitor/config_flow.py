@@ -38,7 +38,7 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
             client = NoIPClient(
                 username=username,
                 password=password,
-                token_2fa=token_2fa if token_2fa else None,
+                token_2fa=token_2fa,
             )
             
             try:
@@ -102,7 +102,7 @@ class NoIPConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore[
             client = NoIPClient(
                 username=username,
                 password=password,
-                token_2fa=token_2fa if token_2fa else None,
+                token_2fa=token_2fa,
             )
             
             try:

@@ -40,7 +40,10 @@ class NoIPClient:
         encoded_credentials = base64.b64encode(credentials.encode()).decode()
         headers = {"Authorization": f"Basic {encoded_credentials}"}
         
-        # Add 2FA token if provided (NoIP expects it in X-2FA-Token header)
+        # Add 2FA token if provided
+        # Note: NoIP's API documentation doesn't officially specify 2FA token handling.
+        # This implementation attempts to pass the token via X-2FA-Token header,
+        # but it may not be supported. Users should prefer application-specific passwords.
         if self.token_2fa:
             headers["X-2FA-Token"] = self.token_2fa
         
